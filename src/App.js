@@ -8,24 +8,25 @@ import { Redirect } from 'react-router'
 
 class App extends Component {
 
-
     constructor(props) {
         super(props);
-        this.state = {isLoggedIn: true}
+        this.state = {isLoggedIn: false}
+        this.autenticate = this.autenticate.bind(this);
+    }
+
+    autenticate(){
+        this.setState({isLoggedIn: true});
     }
 
     render() {
 
-        if (this.state.isLoggedIn){
-            var view = <Redirect to="/todo" />
-        }
+        if (this.state.isLoggedIn
+             || localStorage.getItem("isLoggedIn") == "true") var view = <Redirect to="/todo" />
 
-        else {
-            var view =  <Redirect to="/" />
-        }
+        else var view =  <Redirect to="/" />
         
         const LoginView = () => (
-            <Login/>
+            <Login autenticate={this.autenticate}/>
         );
       
         const TodoAppView = () => (
@@ -40,9 +41,7 @@ class App extends Component {
                     <h1 className="App-title">TODO React App</h1>
                 </header>
 
-                <br/>
-                <br/>
-    
+             
                 <div>
                     {view}
                     <Route exact path="/" component={LoginView}/>
@@ -52,9 +51,6 @@ class App extends Component {
         </Router>
         );
     }
-
-   
-
 }
 
 export default App;
